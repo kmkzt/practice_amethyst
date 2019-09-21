@@ -10,10 +10,16 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-struct MyState;
+struct MyState {
+    /// The `State`-local data. Usually you will not have anything.
+    /// In this case, we have the number of players here.
+    player_count: u8,
+}
 
 impl SimpleState for MyState {
-    fn on_start(&mut self, _data: StateData<'_, GameData<'_, '_>>) {}
+   fn on_start(&mut self, _data: StateData<'_, GameData<'_, '_>>) {
+        println!("Number of players: {}", self.player_count);
+    }
 }
 
 fn main() -> amethyst::Result<()> {
@@ -35,7 +41,9 @@ fn main() -> amethyst::Result<()> {
         )?
         .with_bundle(TransformBundle::new())?;
 
-    let mut game = Application::new("/", MyState, game_data)?;
+    let mut game = Application::new("/", MyState {
+        player_count: 1
+    }, game_data)?;
     game.run();
 
     Ok(())
